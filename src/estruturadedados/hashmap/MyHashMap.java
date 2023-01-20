@@ -3,7 +3,7 @@ package estruturadedados.hashmap;
 public class MyHashMap<K, V> {
 
     private final Element<K, V>[] elements;
-    private int length;
+    int length;
     private final int ALOCACAO = 16;
 
     public MyHashMap() {
@@ -16,9 +16,9 @@ public class MyHashMap<K, V> {
         Element<K, V> newElement = new Element<>(key, value);
         int hash = myHashCode(key);
         
-        if (elements[hash] != null) {
+        if (elements[hash] != null)
             newElement.setNext(elements[hash]);
-        }
+
         elements[hash] = newElement;
         length++;
     }
@@ -36,8 +36,22 @@ public class MyHashMap<K, V> {
         return e;
     }
 
-    public int getLength() {
-        return length;
+    public boolean removeByKey(K key) {
+        int hash = myHashCode(key);
+        Element<K, V> cur = elements[hash], pre = elements[hash];
+        boolean removed = false;
+
+        while (cur != null) {
+            if (cur.getKey() == key) {
+                pre.setNext(cur.getNext());
+                length--;
+                removed = true;
+            }
+            pre = cur;
+            cur = cur.getNext();
+        }
+
+        return removed;
     }
 
     public int myHashCode(K key) {
